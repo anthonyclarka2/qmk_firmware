@@ -1,4 +1,4 @@
-/* Copyright 2019 Danny Nguyen <danny@keeb.io>
+/* Copyright 2020 GhostSeven <work@ghost7.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,21 +25,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /*
         | Knob 1: Vol Dn/Up |      | Knob 2: Page Dn/Up |
         | Press: Mute       | Home | Press: Play/Pause  |
-        | Hold: Layer 2     | Up   | RGB Mode           |
+        | Hold: Layer 2     | Up   | Enter              |
         | Left              | Down | Right              |
      */
     [0] = LAYOUT(
         KC_MUTE, KC_HOME, KC_MPLY,
-        MO(1)  , KC_UP  , RGB_MOD,
+        MO(1)  , KC_UP  , KC_ENT,
         KC_LEFT, KC_DOWN, KC_RGHT
     ),
     /*
-        | RESET          | N/A  | Media Stop |
+        | RESET          | Shift+CMD+B (Build VS Code) | Media Stop |
         | Held: Layer 2  | Home | RGB Mode   |
         | Media Previous | End  | Media Next |
      */
     [1] = LAYOUT(
-        RESET  , BL_STEP, KC_STOP,
+        RESET  , S(G(KC_B)), KC_STOP,
         _______, KC_HOME, RGB_MOD,
         KC_MPRV, KC_END , KC_MNXT
     ),
@@ -48,23 +48,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 bool encoder_update_user(uint8_t index, bool clockwise) {
     if (index == _LEFT) {
         if (clockwise) {
-            tap_code(KC_VOLU);
-        } else {
             tap_code(KC_VOLD);
+        } else {
+            tap_code(KC_VOLU);
         }
     }
     else if (index == _MIDDLE) {
         if (clockwise) {
-            tap_code(KC_DOWN);
-        } else {
             tap_code(KC_UP);
+        } else {
+            tap_code(KC_DOWN);
         }
     }
     else if (index == _RIGHT) {
         if (clockwise) {
-            tap_code(KC_PGDN);
-        } else {
             tap_code(KC_PGUP);
+        } else {
+            tap_code(KC_PGDN);
         }
     }
     return true;

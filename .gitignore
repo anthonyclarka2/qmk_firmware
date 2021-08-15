@@ -67,6 +67,9 @@ CMakeLists.txt
 .vscode/tasks.json
 .vscode/temp.sql
 tags
+GPATH
+GRTAGS
+GTAGS
 
 # Ignore image files
 *.gif
