@@ -15,42 +15,77 @@
  */
 #include QMK_KEYBOARD_H
 
+// extern rgblight_config_t rgblight_config;
+// void keyboard_post_init_user(void) {
+//     rgblight_config.hue = 128;
+//     rgblight_config.sat = 255;
+//     rgblight_config.val = 255;
+// }
+
 enum encoder_names {
   _LEFT,
   _RIGHT,
   _MIDDLE,
 };
 
+enum custom_keycodes {
+    EMACSSAVE = SAFE_RANGE,
+    METAX,
+};
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+    case EMACSSAVE:
+        if (record->event.pressed) {
+            // when keycode EMACSSAVE is pressed
+            SEND_STRING(SS_LCTL("xs"));
+        } else {
+            // when keycode EMACSSAVE is released
+        }
+        break;
+
+    case METAX:
+        if (record->event.pressed) {
+            // when keycode METAX is pressed
+            SEND_STRING(SS_RALT("x"));
+        } else {
+            // when keycode METAX is released
+        }
+        break;
+    }
+    return true;
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /*
-        | Knob 1: Vol Dn/Up |      | Knob 2: Page Dn/Up |
-        | Press: Mute       | Home | Press: Play/Pause  |
-        | Hold: Layer 2     | Up   | Enter              |
-        | Left              | Down | Right              |
+        | Knob 1: Vol Dn/Up |                       | Knob 2: Mouse Wheel Up/Down |
+        | Press: Mute       | Emacs Ctrl-x, Ctrl-s  | Press: Home                 |
+        | Hold: Layer 2     | Emacs Meta-x          | Enter                       |
+        | Meta              | Super                 | Hyper                       |
      */
     [0] = LAYOUT(
-        KC_MUTE, KC_HOME, KC_MPLY,
-        MO(1)  , KC_UP  , KC_ENT,
-        KC_LEFT, KC_DOWN, KC_RGHT
+        KC_MUTE, EMACSSAVE, KC_HOME,
+        MO(1)  , METAX    , KC_ENT,
+        KC_RALT, KC_RGUI  , KC_HYPR
     ),
     /*
         | RESET          | Shift+CMD+B (Build VS Code) | Media Stop |
         | Held: Layer 2  | Home | RGB Mode   |
-        | Media Previous | End  | Media Next |
+        | PgUp           | End  | PgDn       |
      */
     [1] = LAYOUT(
         RESET  , S(G(KC_B)), KC_STOP,
         _______, KC_HOME, RGB_MOD,
-        KC_MPRV, KC_END , KC_MNXT
+        KC_PGUP, KC_END , KC_PGDN
     ),
 };
 
 bool encoder_update_user(uint8_t index, bool clockwise) {
     if (index == _LEFT) {
         if (clockwise) {
-            tap_code(KC_VOLD);
-        } else {
             tap_code(KC_VOLU);
+        } else {
+            tap_code(KC_VOLD);
         }
     }
     else if (index == _MIDDLE) {
@@ -62,9 +97,9 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
     }
     else if (index == _RIGHT) {
         if (clockwise) {
-            tap_code(KC_PGDN);
+            tap_code(KC_MS_WH_DOWN);
         } else {
-            tap_code(KC_PGUP);
+            tap_code(KC_MS_WH_UP);
         }
     }
     return true;
