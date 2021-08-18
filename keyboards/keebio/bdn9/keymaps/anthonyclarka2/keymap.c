@@ -15,12 +15,9 @@
  */
 #include QMK_KEYBOARD_H
 
-// extern rgblight_config_t rgblight_config;
-// void keyboard_post_init_user(void) {
-//     rgblight_config.hue = 128;
-//     rgblight_config.sat = 255;
-//     rgblight_config.val = 255;
-// }
+void keyboard_post_init_user(void) {
+    rgblight_sethsv_noeeprom(HSV_PURPLE);
+}
 
 enum encoder_names {
   _LEFT,
@@ -30,7 +27,6 @@ enum encoder_names {
 
 enum custom_keycodes {
     EMACSSAVE = SAFE_RANGE,
-    METAX,
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -43,15 +39,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             // when keycode EMACSSAVE is released
         }
         break;
-
-    case METAX:
-        if (record->event.pressed) {
-            // when keycode METAX is pressed
-            SEND_STRING(SS_RALT("x"));
-        } else {
-            // when keycode METAX is released
-        }
-        break;
     }
     return true;
 };
@@ -60,13 +47,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /*
         | Knob 1: Vol Dn/Up |                       | Knob 2: Mouse Wheel Up/Down |
         | Press: Mute       | Emacs Ctrl-x, Ctrl-s  | Press: Home                 |
-        | Hold: Layer 2     | Emacs Meta-x          | Enter                       |
+        | Hold: Layer 2     | Emacs Meta-x          | Ctrl-g                      |
         | Meta              | Super                 | Hyper                       |
      */
     [0] = LAYOUT(
-        KC_MUTE, EMACSSAVE, KC_HOME,
-        MO(1)  , METAX    , KC_ENT,
-        KC_RALT, KC_RGUI  , KC_HYPR
+        KC_MUTE, EMACSSAVE , KC_HOME,
+        MO(1)  , RALT(KC_X), LCTL(KC_G),
+        KC_RALT, KC_RGUI   , KC_HYPR
     ),
     /*
         | RESET          | Shift+CMD+B (Build VS Code) | Media Stop |
