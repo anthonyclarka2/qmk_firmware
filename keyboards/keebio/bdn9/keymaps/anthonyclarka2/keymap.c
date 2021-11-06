@@ -27,6 +27,7 @@ enum encoder_names {
 
 enum custom_keycodes {
     EMACSSAVE = SAFE_RANGE,
+    ESCC,
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -35,6 +36,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         if (record->event.pressed) {
             // when keycode EMACSSAVE is pressed
             SEND_STRING(SS_LCTL("xs"));
+        } else {
+            // when keycode EMACSSAVE is released
+        }
+        break;
+
+    case ESCC:
+        if (record->event.pressed) {
+            // when keycode EMACSSAVE is pressed
+            SEND_STRING(SS_DOWN(X_ESC)"c"SS_UP(X_ESC));
         } else {
             // when keycode EMACSSAVE is released
         }
@@ -53,7 +63,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT(
         KC_MUTE, EMACSSAVE , KC_HOME,
         MO(1)  , RALT(KC_X), LCTL(KC_G),
-        KC_RALT, KC_RGUI   , KC_HYPR
+        KC_RALT, KC_RGUI   , ESCC /* TODO: esc-c */
     ),
     /*
         | RESET          | Shift+CMD+B (Build VS Code) | Media Stop |
