@@ -28,6 +28,7 @@ enum encoder_names {
 enum custom_keycodes {
     EMACSSAVE = SAFE_RANGE,
     ESCC,
+    HURRY,
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -43,12 +44,22 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     case ESCC:
         if (record->event.pressed) {
-            // when keycode EMACSSAVE is pressed
+            // when keycode ESCC is pressed
             SEND_STRING(SS_DOWN(X_ESC)"c"SS_UP(X_ESC));
         } else {
-            // when keycode EMACSSAVE is released
+            // when keycode ESCC is released
         }
         break;
+
+    case HURRY:
+        if (record->event.pressed) {
+            // when keycode HURRY is pressed
+            SEND_STRING("h" SS_DELAY(100) SS_TAP(X_DOWN) SS_TAP(X_ENTER) SS_TAP(X_RIGHT));
+        } else {
+            // when keycode HURRY is released
+        }
+        break;
+
     }
     return true;
 };
@@ -58,12 +69,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         | Knob 1: Vol Dn/Up |                       | Knob 2: Mouse Wheel Up/Down |
         | Press: Mute       | Emacs Ctrl-x, Ctrl-s  | Press: Home                 |
         | Hold: Layer 2     | Emacs Meta-x          | Ctrl-g                      |
-        | Meta              | Super                 | Hyper                       |
+        | Hyper             | Super                 | Esc-c                       |
      */
     [0] = LAYOUT(
         KC_MUTE, EMACSSAVE , KC_HOME,
         MO(1)  , RALT(KC_X), LCTL(KC_G),
-        KC_RALT, KC_RGUI   , ESCC /* TODO: esc-c */
+        KC_LALT, KC_LGUI   , ESCC
     ),
     /*
         | RESET          | Shift+CMD+B (Build VS Code) | Media Stop |
@@ -73,7 +84,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [1] = LAYOUT(
         RESET  , S(G(KC_B)), KC_STOP,
         _______, KC_HOME, RGB_MOD,
-        KC_PGUP, KC_END , KC_PGDN
+        KC_PGUP, KC_END , HURRY
     ),
 };
 

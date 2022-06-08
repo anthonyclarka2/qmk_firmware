@@ -56,7 +56,7 @@
 
 /* Much more so than a keyboard, speed matters for a mouse. So we'll go for as high
    a polling rate as possible. */
-#define USB_POLLING_INTERVAL_MS 1
+#define USB_POLLING_INTERVAL_MS 4
 #define USB_MAX_POWER_CONSUMPTION 100
 
 /* define if matrix has ghost (lacks anti-ghosting diodes) */

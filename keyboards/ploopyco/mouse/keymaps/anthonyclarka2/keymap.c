@@ -26,9 +26,9 @@ void keyboard_post_init_user(void) {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT(/* Base */
                  C(KC_UP), KC_BTN1, KC_BTN3, KC_BTN2, MO(1), KC_PGDN, KC_PGUP, DPI_CONFIG),
-    [1] = LAYOUT(/* Media */
-                 RGB_HUI, RGB_MOD, RGB_TOG, RGB_RMOD, MO(1), KC_VOLU, KC_VOLD, RESET)
-}; /* TODO: change RGB keys to esc-c and shift+option+cmd+v */
+    [1] = LAYOUT(/* Extras */
+                 RGB_HUI, C(KC_V), RGB_TOG, S(A(G(KC_V))), MO(1), KC_VOLD, KC_VOLU, RESET)
+}; // KC_LSFT(KC_LOPT(KC_LCMD(KC_V)))
 
 void eeconkfig_init_user(void) {
     rgblight_enable();
